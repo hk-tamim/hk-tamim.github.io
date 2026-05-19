@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. HKT Tournament - Control Center</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        darkbg: '#07070D', 
+                        sidebarbg: '#0E0E1A', 
+                        cardbg: '#141426', 
+                        accent: '#FF3366', 
+                        borderline: '#1F1F38' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #07070D; color: #F1F5F9; font-family: 'Inter', sans-serif; }
+        .active-nav { background-color: #141426; border-left: 4px solid #FF3366; color: #FFFFFF; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+
+    <!-- SIDEBAR CORE NAVIGATION INTERFACE PANEL -->
+    <aside class="w-64 bg-sidebarbg border-r border-borderline flex flex-col fixed h-full z-40">
+        <div class="p-5 border-b border-borderline flex items-center gap-3">
+            <i class="fa-solid fa-screwdriver-wrench text-accent text-lg"></i>
+            <h1 class="font-black text-white text-xs uppercase tracking-widest">Mr. HKT Tower</h1>
+        </div>
+        <nav class="flex-1 p-4 flex flex-col gap-1 overflow-y-auto text-xs font-bold uppercase tracking-wider">
+            <button onclick="switchAdminView('view-dash', this)" class="nav-item active-nav w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-400 hover:bg-cardbg hover:text-white transition">
+                <i class="fa-solid fa-chart-pie"></i>System Dashboard
+            </button>
+            <button onclick="switchAdminView('view-create', this)" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-400 hover:bg-cardbg hover:text-white transition">
+                <i class="fa-solid fa-circle-plus"></i>Publish Tournament
+            </button>
+            <button onclick="switchAdminView('view-notices', this)" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-400 hover:bg-cardbg hover:text-white transition">
+                <i class="fa-solid fa-bullhorn"></i>Notice Manager
+            </button>
+            <button onclick="switchAdminView('view-credentials', this)" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-400 hover:bg-cardbg hover:text-white transition">
+                <i class="fa-solid fa-lock text-slate-400"></i>Room Allocation
+            </button>
+            <button onclick="switchAdminView('view-payments', this)" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-400 hover:bg-cardbg hover:text-white transition">
+                <i class="fa-solid fa-receipt"></i>Ledger Requests
+            </button>
+            <button onclick="switchAdminView('view-disbursal', this)" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-400 hover:bg-cardbg hover:text-white transition">
+                <i class="fa-solid fa-trophy"></i>Result Disbursal
+            </button>
+        </nav>
+    </aside>
+
+    <!-- MASTER PRESENTATION BOX LAYOUT -->
+    <div class="pl-64 flex-grow min-h-screen flex flex-col">
+        <header class="h-16 border-b border-borderline bg-sidebarbg px-8 flex items-center justify-between font-bold text-xs">
+            <span class="text-slate-400 uppercase tracking-widest">Global Master Operations Console</span>
+        </header>
+
+        <main class="p-8 flex-grow">
+            <!-- LAYER 1: CONTROL CENTER SYSTEM METRICS -->
+            <section id="view-dash" class="admin-panel flex flex-col gap-4">
+                <h2 class="text-base font-bold uppercase tracking-wide text-white">Ecosystem Baseline Metrics</h2>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-cardbg border border-borderline p-6 rounded-xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Registered Player Profiles</p>
+                        <p id="metric-users" class="text-xl font-extrabold mt-2 text-white">0</p>
+                    </div>
+                    <div class="bg-cardbg border border-borderline p-6 rounded-xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Active Match Tracking</p>
+                        <p id="metric-matches" class="text-xl font-extrabold mt-2 text-accent">0</p>
+                    </div>
+                    <div class="bg-cardbg border border-borderline p-6 rounded-xl">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Open Pending Transactions</p>
+                        <p id="metric-tx" class="text-xl font-extrabold mt-2 text-amber-400">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LAYER 2: CREATION MATRIX CONTEXT FORMS -->
+            <section id="view-create" class="admin-panel hidden flex flex-col gap-4 max-w-xl">
+                <h2 class="text-base font-bold uppercase tracking-wide text-white">Deploy Tournament Engine Track</h2>
+                <form id="form-create-match" class="bg-cardbg border border-borderline p-6 rounded-xl flex flex-col gap-4 text-xs font-semibold">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Match Event Title</label>
+                        <input type="text" id="m-title" placeholder="Match Title/Event Name" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Execution Timestamp</label>
+                        <input type="text" id="m-time" placeholder="Tournament Execution Timestamp Text String" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Map Choice</label>
+                            <input type="text" id="m-map" placeholder="e.g. Bermuda, Purgatory" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Game Category Mode Selection</label>
+                            <select id="m-gamemode" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                                <option value="Classic">Classic</option>
+                                <option value="Battle Royale">Battle Royale</option>
+                                <option value="Lone Wolf">Lone Wolf</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Registration Entry Fee (৳)</label>
+                            <input type="number" id="m-fee" placeholder="Fee Matrix Requirement" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Booyah Winner Prize Pool (৳)</label>
+                            <input type="number" id="m-prize" placeholder="Grand Prize Allocation" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Per Kill Bounty Allocation (৳)</label>
+                            <input type="number" id="m-kill" placeholder="Bounty Per Elimination" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">Maximum System Slot Bounds</label>
+                            <input type="number" id="m-slots" placeholder="e.g. 48" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-accent text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition hover:bg-opacity-90 shadow-md mt-2">Publish Live System Event</button>
+                </form>
+            </section>
+
+            <!-- LAYER 3: DYNAMIC 4-ZONE NOTICE MANAGER SECTION -->
+            <section id="view-notices" class="admin-panel hidden flex flex-col gap-4 max-w-xl">
+                <h2 class="text-base font-bold uppercase tracking-wide text-white">4-Zone Realtime Notice Matrix</h2>
+                <div class="bg-cardbg border border-borderline p-6 rounded-xl flex flex-col gap-4 text-xs font-semibold">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">1. Deposit Form Notice</label>
+                        <textarea id="notice-deposit-input" rows="2" placeholder="Write parameters/instructions to view at the top of the app deposit box..." class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">2. Withdraw Form Notice</label>
+                        <textarea id="notice-withdraw-input" rows="2" placeholder="Write rules/timings to display at the top of the app withdrawal box..." class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">3. Match Dashboard Scrolling Marquee</label>
+                        <textarea id="notice-dashboard-input" rows="2" placeholder="Enter alert text that flows as a scrolling marquee across player dashboards..." class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">4. General Notice Bell Modal Pop-up</label>
+                        <textarea id="notice-general-input" rows="4" placeholder="Enter bulk notification announcements displayed when users open the pop-up bell modal box..." class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none focus:border-accent"></textarea>
+                    </div>
+                    <button onclick="updateSystemNotices()" class="w-full bg-accent text-white font-bold py-3.5 rounded-xl uppercase tracking-wider shadow-md transition hover:bg-opacity-90">Commit System Notice Updates</button>
+                </div>
+            </section>
+
+            <!-- LAYER 4: CUSTOM MATCHROOM CREDENTIALS MANAGEMENT DISPATCH -->
+            <section id="view-credentials" class="admin-panel hidden flex flex-col gap-4 max-w-xl">
+                <h2 class="text-base font-bold uppercase tracking-wide text-white">Broadcast Allocation Access Keys</h2>
+                <div class="bg-cardbg border border-borderline p-6 rounded-xl flex flex-col gap-4 text-xs font-semibold">
+                    <select id="select-cred-match" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-slate-300 focus:outline-none"></select>
+                    <input type="text" id="m-roomid" placeholder="In-Game Custom Match Room Key ID" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none">
+                    <input type="text" id="m-roompass" placeholder="In-Game Custom Match Room Pass Key String" class="w-full bg-darkbg border border-borderline rounded-xl p-3 text-white focus:outline-none">
+                    <button onclick="dispatchRoomAccessKeys()" class="w-full bg-accent text-white font-bold py-3.5 rounded-xl uppercase tracking-wider shadow-md">Push Live Connection Keys</button>
+                </div>
+            </section>
+
+            <!-- LAYER 5: TRANSACTION AUTHORIZATION DESK -->
+            <section id="view-payments" class="admin-panel hidden flex flex-col gap-4">
+                <h2 class="text-base font-bold uppercase tracking-wide text-white">Open Ledger Processing Desk (bKash & Nagad)</h2>
+                <div class="bg-cardbg border border-borderline rounded-xl overflow-hidden text-xs">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-sidebarbg border-b border-borderline text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                <th class="p-4">Applicant Profile</th>
+                                <th class="p-4">Action Type</th>
+                                <th class="p-4">Channel Route</th>
+                                <th class="p-4">Transaction Identification (TrxID)</th>
+                                <th class="p-4 text-center">Value Margin</th>
+                                <th class="p-4 text-center">Settlement</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-transactions-body" class="divide-y divide-borderline"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- LAYER 6: RESULT SETTLEMENT & BONUS DISTRIBUTION DISBURSAL DESK -->
+            <section id="view-disbursal" class="admin-panel hidden flex flex-col gap-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-base font-bold uppercase tracking-wide text-white">Perform Event Disbursal Settlement Calculations</h2>
+                    <select id="select-disbursal-match" onchange="loadRegisteredMatchPlayers(this.value)" class="bg-cardbg border border-borderline text-xs font-bold rounded-xl p-3 text-white focus:outline-none"></select>
+                </div>
+                <div class="bg-cardbg border border-borderline rounded-xl overflow-hidden text-xs">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-sidebarbg border-b border-borderline text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                <th class="p-4">Player Fire ID Registry (UID)</th>
+                                <th class="p-4">Verified Match Kills Count Input</th>
+                                <th class="p-4 text-center">Booyah Placement Status Toggle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-players-body" class="divide-y divide-borderline"></tbody>
+                    </table>
+                    <div class="p-4 bg-sidebarbg border-t border-borderline text-right">
+                        <button onclick="executePrizeDistributionSettlement()" class="bg-emerald-600 px-6 py-3 font-bold uppercase tracking-wider text-white rounded-xl transition hover:bg-emerald-500 shadow-md">Execute Matrix Distributions</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== ECOSYSTEM DASHBOARD ENGINE BACKEND ==================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, query, where, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Accurate Firebase Configurations Matching Profiles Instantly
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3TBFpNprregew2VyV6dXOEwuJN970zRo",
+            authDomain: "mr-hkt-tournament1.firebaseapp.com",
+            projectId: "mr-hkt-tournament1",
+            storageBucket: "mr-hkt-tournament1.firebasestorage.app",
+            messagingSenderId: "338211432145",
+            appId: "1:338211432145:android:6bee8f4f429bb41e1207f0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Sidebar Dashboard Panel View State Manager
+        window.switchAdminView = function(viewId, element) {
+            document.querySelectorAll('.admin-panel').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active-nav'));
+            document.getElementById(viewId).classList.remove('hidden');
+            element.classList.add('active-nav');
+        };
+
+        // Initialize Realtime System Statistics Stream Mappings
+        function initMetricsDashboardStream() {
+            onSnapshot(collection(db, "users"), snap => {
+                document.getElementById('metric-users').innerText = snap.size;
+            });
+            onSnapshot(collection(db, "matches"), snap => {
+                let openCount = 0;
+                snap.forEach(d => { if(d.data().status !== "settled") openCount++; });
+                document.getElementById('metric-matches').innerText = openCount;
+                populateMatchDropdownSelectors(snap);
+            });
+            onSnapshot(query(collection(db, "transactions"), where("status", "==", "pending")), snap => {
+                document.getElementById('metric-tx').innerText = snap.size;
+                renderFinancialQueueTable(snap);
+            });
+            
+            // Sync current notice values to Admin configuration forms
+            onSnapshot(doc(db, "settings", "notices"), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('notice-deposit-input').value = data.deposit_notice || "";
+                    document.getElementById('notice-withdraw-input').value = data.withdraw_notice || "";
+                    document.getElementById('notice-dashboard-input').value = data.dashboard_notice || "";
+                    document.getElementById('notice-general-input').value = data.general_notice || "";
+                }
+            });
+        }
+        initMetricsDashboardStream();
+
+        // Push Notice Configuration Modifications to Firestore Engine Track Document
+        window.updateSystemNotices = async function() {
+            try {
+                await setDoc(doc(db, "settings", "notices"), {
+                    deposit_notice: document.getElementById('notice-deposit-input').value.trim(),
+                    withdraw_notice: document.getElementById('notice-withdraw-input').value.trim(),
+                    dashboard_notice: document.getElementById('notice-dashboard-input').value.trim(),
+                    general_notice: document.getElementById('notice-general-input').value.trim()
+                }, { merge: true });
+                alert("Notice board variables written and live across connected user devices.");
+            } catch (err) {
+                alert("Notice Update Operation Error: " + err.message);
+            }
+        };
+
+        // Feed Realtime Updates Into Configured Selection Nodes
+        function populateMatchDropdownSelectors(snapshot) {
+            const credSelect = document.getElementById('select-cred-match');
+            const disbursalSelect = document.getElementById('select-disbursal-match');
+            
+            let selectionMarkup = `<option value="">-- Choose Target Tournament Context Record --</option>`;
+            snapshot.forEach(doc => {
+                if (doc.data().status !== "settled") {
+                    selectionMarkup += `<option value="${doc.id}">${doc.data().title}</option>`;
+                }
+            });
+            credSelect.innerHTML = selectionMarkup;
+            disbursalSelect.innerHTML = selectionMarkup;
+        }
+
+        // Action Pipeline 1: Create Match Event Publisher Submission
+        document.getElementById('form-create-match').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "matches"), {
+                    title: document.getElementById('m-title').value.trim(),
+                    time: document.getElementById('m-time').value.trim(),
+                    map: document.getElementById('m-map').value.trim(),
+                    game_mode: document.getElementById('m-gamemode').value,
+                    fee: parseFloat(document.getElementById('m-fee').value),
+                    prize: parseFloat(document.getElementById('m-prize').value),
+                    per_kill: parseFloat(document.getElementById('m-kill').value),
+                    slots: parseInt(document.getElementById('m-slots').value),
+                    room_id: "",
+                    room_password: "",
+                    joined_players: [],
+                    status: "active",
+                    timestamp: new Date()
+                });
+                alert("Ecosystem update notice: Match instance deployed live.");
+                document.getElementById('form-create-match').reset();
+            } catch (err) {
+                alert("Creation Pipeline Fault: " + err.message);
+            }
+        });
+
+        // Action Pipeline 2: Dispatch Connection Keys to Match Slots
+        window.dispatchRoomAccessKeys = async function() {
+            const matchId = document.getElementById('select-cred-match').value;
+            const roomId = document.getElementById('m-roomid').value.trim();
+            const roomPass = document.getElementById('m-roompass').value.trim();
+
+            if (!matchId) { alert("Missing context target: Select match track."); return; }
+
+            try {
+                await updateDoc(doc(db, "matches", matchId), {
+                    room_id: roomId,
+                    room_password: roomPass
+                });
+                alert("Room updates pushed to active user devices successfully.");
+                document.getElementById('m-roomid').value = "";
+                document.getElementById('m-roompass').value = "";
+            } catch (err) {
+                alert("Update execution failure: " + err.message);
+            }
+        };
+
+        // Action Pipeline 3: Render Ledger Processing Desk Table
+        function renderFinancialQueueTable(snapshot) {
+            const tbody = document.getElementById('table-transactions-body');
+            tbody.innerHTML = "";
+
+            if (snapshot.empty) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500 font-semibold">Ledger queue balances cleared. No items require verification.</td></tr>`;
+                return;
+            }
+
+            snapshot.forEach((txDoc) => {
+                const tx = txDoc.data();
+                const id = txDoc.id;
+
+                if (tx.method !== "bkash" && tx.method !== "nagad") return;
+
+                const rowNode = `
+                    <tr class="hover:bg-sidebarbg/30 transition border-b border-borderline">
+                        <td class="p-4 font-bold text-white">${tx.name || "N/A Account"}<br><span class="text-[10px] text-slate-500 font-medium">${tx.phone || ""}</span></td>
+                        <td class="p-4 font-bold uppercase tracking-wider text-[10px] text-slate-300">${tx.type}</td>
+                        <td class="p-4 font-extrabold uppercase text-slate-300">${tx.method}</td>
+                        <td class="p-4 font-mono text-slate-400 text-[11px] select-all">${tx.transaction_id_field}</td>
+                        <td class="p-4 text-center font-black ${tx.type === 'deposit' ? 'text-emerald-400' : 'text-rose-400'}">৳${tx.amount.toFixed(2)}</td>
+                        <td class="p-4 text-center">
+                            <div class="flex justify-center gap-1.5">
+                                <button onclick="settleFinancialRequest('${id}', 'success')" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg text-white font-bold transition">Approve</button>
+                                <button onclick="settleFinancialRequest('${id}', 'rejected')" class="bg-rose-600 hover:bg-rose-500 px-3 py-1.5 rounded-lg text-white font-bold transition">Reject</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += rowNode;
+            });
+        }
+
+        // Action Pipeline 4: Settle Ledger Balances 
+        window.settleFinancialRequest = async function(txId, targetState) {
+            if (!confirm(`Commit changes to log state parameter as [${targetState.toUpperCase()}]?`)) return;
+
+            const txRef = doc(db, "transactions", txId);
+
+            try {
+                await runTransaction(db, async (transaction) => {
+                    const freshTx = await transaction.get(txRef);
+                    if (!freshTx.exists()) throw "Missing transactional trace logs document.";
+
+                    const txData = freshTx.data();
+                    if (txData.status !== "pending") throw "Constraint Violation: Log already settled.";
+
+                    const userRef = doc(db, "users", txData.uid);
+                    const freshUser = await transaction.get(userRef);
+                    if (!freshUser.exists()) throw "Target client profile reference track lost.";
+
+                    const userData = freshUser.data();
+
+                    if (targetState === "success") {
+                        if (txData.type === "deposit") {
+                            const netDeposit = (userData.wallet_balance || 0) + txData.amount;
+                            transaction.update(userRef, { wallet_balance: netDeposit });
+                        } else if (txData.type === "withdraw") {
+                            if ((userData.winning_balance || 0) < txData.amount) throw "Client balance allocation validation threshold overflow.";
+                            const netWithdrawal = (userData.winning_balance || 0) - txData.amount;
+                            transaction.update(userRef, { winning_balance: netWithdrawal });
+                        }
+                    }
+                    transaction.update(txRef, { status: targetState });
+                });
+                alert("Ledger balances reconciled and written successfully.");
+            } catch (err) {
+                alert("Reconciliation Runtime Fatal Failure: " + err);
+            }
+        };
+
+        // Action Pipeline 5: Load Registered Match Players Grid
+        let currentDisbursalTargetMatchId = "";
+        let currentDisbursalTargetMatchMeta = null;
+
+        window.loadRegisteredMatchPlayers = async function(matchId) {
+            currentDisbursalTargetMatchId = matchId;
+            const tbody = document.getElementById('table-players-body');
+            tbody.innerHTML = "";
+
+            if (!matchId) return;
+
+            try {
+                const matchSnapshot = await getDoc(doc(db, "matches", matchId));
+                if (!matchSnapshot.exists()) return;
+
+                currentDisbursalTargetMatchMeta = matchSnapshot.data();
+                const playersArray = currentDisbursalTargetMatchMeta.joined_players || [];
+
+                if (playersArray.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-500 font-semibold">No active registrations mapped onto this tournament track instance.</td></tr>`;
+                    return;
+                }
+
+                playersArray.forEach((playerUid) => {
+                    const rowNode = `
+                        <tr class="hover:bg-sidebarbg/40 transition border-b border-borderline dataset-player-mapping-row" data-uid="${playerUid}">
+                            <td class="p-4 font-mono font-bold text-white tracking-wide select-all">${playerUid}</td>
+                            <td class="p-4">
+                                <input type="number" value="0" min="0" class="kill-count-field w-28 bg-darkbg border border-borderline rounded-xl p-2 text-center font-bold text-white focus:outline-none focus:border-accent">
+                            </td>
+                            <td class="p-4 text-center">
+                                <input type="checkbox" class="booyah-victory-toggle w-5 h-5 accent-accent bg-darkbg rounded border-borderline">
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += rowNode;
+                });
+            } catch (err) {
+                alert("Player grid generation execution fault: " + err.message);
+            }
+        };
+
+        // Action Pipeline 6: Execute Prize Matrix Calculations Disbursal Settlements
+        window.executePrizeDistributionSettlement = async function() {
+            if (!currentDisbursalTargetMatchId || !currentDisbursalTargetMatchMeta) {
+                alert("Process Context Error: Select a functional valid match targeted index.");
+                return;
+            }
+
+            if (!confirm("Authorize prize distribution settlement procedures? This action commits mutations directly across matching documents.")) return;
+
+            const rows = document.querySelectorAll('.dataset-player-mapping-row');
+            let profileMutationCounter = 0;
+
+            try {
+                for (let row of rows) {
+                    const playerUid = row.getAttribute('data-uid');
+                    const registeredKills = parseInt(row.querySelector('.kill-count-field').value) || 0;
+                    const isVictoryBooyah = row.querySelector('.booyah-victory-toggle').checked;
+
+                    let balanceRewardCreditSum = registeredKills * (currentDisbursalTargetMatchMeta.per_kill || 0);
+                    if (isVictoryBooyah) {
+                        balanceRewardCreditSum += (currentDisbursalTargetMatchMeta.prize || 0);
+                    }
+
+                    if (balanceRewardCreditSum > 0) {
+                        // Query by ff_uid string matched to the value input during user registration joining
+                        const profileQuery = query(collection(db, "users"), where("ff_uid", "==", playerUid));
+                        const profileSnapshot = await getDocs(profileQuery);
+
+                        if (!profileSnapshot.empty) {
+                            const targetDocObj = profileSnapshot.docs[0];
+                            const baseWinningLedgerVal = targetDocObj.data().winning_balance || 0;
+                            
+                            await updateDoc(doc(db, "users", targetDocObj.id), {
+                                winning_balance: baseWinningLedgerVal + balanceRewardCreditSum
+                            });
+                        }
+                    }
+                    profileMutationCounter++;
+                }
+
+                await updateDoc(doc(db, "matches", currentDisbursalTargetMatchId), {
+                    status: "settled"
+                });
+
+                alert(`Calculations committed. Distributed credits accurately across ${profileMutationCounter} verified profile parameters.`);
+                document.getElementById('table-players-body').innerHTML = "";
+                document.getElementById('select-disbursal-match').value = "";
+                currentDisbursalTargetMatchId = "";
+                currentDisbursalTargetMatchMeta = null;
+            } catch (err) {
+                alert("Disbursal Engine Stopped Unexpectedly: " + err.message);
+            }
+        };
+    </script>
+</body>
+</html>
