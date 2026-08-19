@@ -1,0 +1,752 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: #ffffff;
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(126, 87, 255, 0.20),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            rgba(0, 212, 255, 0.14),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #07070d 0%,
+            #0d0c18 50%,
+            #07080e 100%
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND EFFECT
+========================================================= */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* =========================================================
+   PAGE WRAPPER
+========================================================= */
+
+.page-wrapper {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px 15px;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.profile-card {
+    position: relative;
+
+    width: 100%;
+    max-width: 550px;
+
+    padding: 35px 22px 25px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.09),
+            rgba(255, 255, 255, 0.035)
+        );
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    animation: cardAppear 0.7s ease both;
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   PROFILE HEADER
+========================================================= */
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+
+/* =========================================================
+   PROFILE IMAGE
+========================================================= */
+
+.profile-image-wrapper {
+    position: relative;
+
+    width: 118px;
+    height: 118px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-ring {
+    position: absolute;
+    inset: -6px;
+
+    border-radius: 50%;
+
+    background: conic-gradient(
+        from 0deg,
+        #7c3aed,
+        #06b6d4,
+        #3b82f6,
+        #a855f7,
+        #7c3aed
+    );
+
+    animation: rotateRing 7s linear infinite;
+
+    filter: blur(0.5px);
+
+    box-shadow:
+        0 0 20px rgba(124, 58, 237, 0.45),
+        0 0 40px rgba(6, 182, 212, 0.18);
+}
+
+.profile-ring::after {
+    content: "";
+
+    position: absolute;
+    inset: 3px;
+
+    border-radius: 50%;
+
+    background: #0d0c18;
+}
+
+@keyframes rotateRing {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.profile-image {
+    position: relative;
+
+    width: 108px;
+    height: 108px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 4px solid #11111b;
+
+    z-index: 2;
+
+    transition:
+        transform 0.4s ease,
+        filter 0.4s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.04);
+    filter: brightness(1.1);
+}
+
+
+/* =========================================================
+   NAME
+========================================================= */
+
+.profile-name {
+    font-size: clamp(1.65rem, 5vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.verified {
+    color: #3b82f6;
+    font-size: 0.72em;
+}
+
+
+/* =========================================================
+   TAGLINE
+========================================================= */
+
+.profile-tagline {
+    margin-top: 7px;
+
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    color: #b7b5c5;
+}
+
+.profile-description {
+    max-width: 420px;
+
+    margin: 12px auto 0;
+
+    color: #8f8d9e;
+
+    font-size: 0.84rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+.links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* =========================================================
+   SOCIAL BUTTON
+========================================================= */
+
+.social-link {
+    position: relative;
+
+    width: 100%;
+    min-height: 62px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 17px;
+
+    text-decoration: none;
+    color: #ffffff;
+
+    border-radius: 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.085),
+            rgba(255, 255, 255, 0.035)
+        );
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.social-link::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: -120%;
+
+    width: 80%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.12),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    transition: left 0.65s ease;
+}
+
+.social-link:hover::before {
+    left: 140%;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(255, 255, 255, 0.18);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.13),
+            rgba(255, 255, 255, 0.055)
+        );
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.social-link:active {
+    transform: scale(0.975);
+}
+
+
+/* =========================================================
+   ICON BOX
+========================================================= */
+
+.icon-box {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    font-size: 1.15rem;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease;
+}
+
+.social-link:hover .icon-box {
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+
+/* =========================================================
+   PLATFORM ICON COLORS
+========================================================= */
+
+.facebook .icon-box {
+    color: #1877f2;
+}
+
+.tiktok .icon-box {
+    color: #ffffff;
+}
+
+.instagram .icon-box {
+    color: #e1306c;
+}
+
+.whatsapp .icon-box {
+    color: #25d366;
+}
+
+.telegram .icon-box {
+    color: #229ed9;
+}
+
+.youtube .icon-box {
+    color: #ff0000;
+}
+
+.gaming .icon-box {
+    color: #7289da;
+}
+
+
+/* =========================================================
+   LINK TEXT
+========================================================= */
+
+.link-text {
+    flex: 1;
+
+    margin-left: 13px;
+
+    font-size: 0.94rem;
+    font-weight: 600;
+
+    letter-spacing: -0.01em;
+}
+
+
+/* =========================================================
+   EXTERNAL ICON
+========================================================= */
+
+.external-icon {
+    color: rgba(255, 255, 255, 0.35);
+
+    font-size: 0.78rem;
+
+    transition:
+        transform 0.25s ease,
+        color 0.25s ease;
+}
+
+.social-link:hover .external-icon {
+    color: rgba(255, 255, 255, 0.8);
+    transform: translate(2px, -2px);
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.profile-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.action-button {
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+
+    background: rgba(255, 255, 255, 0.12);
+
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.action-button:active {
+    transform: scale(0.96);
+}
+
+.action-button.secondary {
+    color: #bdbbc9;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.profile-footer {
+    text-align: center;
+
+    margin-top: 25px;
+
+    color: #777585;
+
+    font-size: 0.72rem;
+}
+
+.footer-line {
+    height: 1px;
+
+    margin-bottom: 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.10),
+            transparent
+        );
+}
+
+.profile-footer p {
+    margin-bottom: 5px;
+}
+
+.profile-footer .fa-heart {
+    color: #ff4d6d;
+    animation: heartbeat 1.6s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    15% {
+        transform: scale(1.15);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+}
+
+.copyright {
+    color: #5f5d6c;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+    bottom: 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    max-width: calc(100% - 30px);
+
+    padding: 12px 17px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+
+    background:
+        rgba(20, 20, 30, 0.90);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    color: #ffffff;
+
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.35);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translate(-50%, 20px);
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0.3s ease;
+
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translate(-50%, 0);
+}
+
+.toast i {
+    color: #4ade80;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (min-width: 600px) {
+
+    .page-wrapper {
+        padding: 45px 20px;
+    }
+
+    .profile-card {
+        padding: 42px 30px 28px;
+    }
+
+    .links-container {
+        gap: 13px;
+    }
+
+    .social-link {
+        min-height: 66px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 900px) {
+
+    .page-wrapper {
+        padding: 60px 20px;
+    }
+
+    .profile-card {
+        max-width: 580px;
+        padding: 48px 35px 30px;
+    }
+
+    .social-link {
+        min-height: 68px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .page-wrapper {
+        padding: 15px 10px;
+    }
+
+    .profile-card {
+        padding: 28px 15px 20px;
+        border-radius: 24px;
+    }
+
+    .profile-image-wrapper {
+        width: 105px;
+        height: 105px;
+    }
+
+    .profile-image {
+        width: 96px;
+        height: 96px;
+    }
+
+    .social-link {
+        min-height: 58px;
+        padding: 8px 12px;
+    }
+
+    .icon-box {
+        width: 38px;
+        height: 38px;
+    }
+
+    .link-text {
+        margin-left: 10px;
+        font-size: 0.86rem;
+    }
+
+    .profile-actions {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+}
